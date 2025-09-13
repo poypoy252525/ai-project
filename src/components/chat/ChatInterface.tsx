@@ -125,7 +125,12 @@ const ChatInterface = memo<ChatInterfaceProps>(({ className }) => {
   ErrorDisplay.displayName = "ErrorDisplay";
 
   return (
-    <div className={cn("flex flex-col h-screen bg-background", className)}>
+    <div
+      className={cn(
+        "flex flex-col mobile-full-height bg-background",
+        className
+      )}
+    >
       {/* Messages Area */}
       <div className="flex-1 overflow-hidden">
         <ScrollArea ref={scrollAreaRef} className="h-full">
@@ -173,7 +178,9 @@ const ChatInterface = memo<ChatInterfaceProps>(({ className }) => {
             onSendMessage={sendMessage}
             disabled={isLoading}
             className="border-none shadow-none bg-transparent"
-            placeholder={isLoading ? "AI is thinking..." : "Message Chatbot"}
+            placeholder={
+              isLoading ? "AI is thinking..." : "Message Delfin Chatbot"
+            }
           />
         </div>
       </div>

@@ -119,6 +119,12 @@
     @apply bg-background text-foreground;
   }
 
+  /* Mobile viewport height utilities */
+  .mobile-full-height {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  }
+
   /* Custom scrollbar styles */
   .scrollbar-thin {
     scrollbar-width: thin;
