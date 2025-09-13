@@ -178,9 +178,7 @@ const ChatInterface = memo<ChatInterfaceProps>(({ className }) => {
             onSendMessage={sendMessage}
             disabled={isLoading}
             className="border-none shadow-none bg-transparent"
-            placeholder={
-              isLoading ? "AI is thinking..." : "Message Delfin Chatbot"
-            }
+            placeholder={isLoading ? "AI is thinking..." : "Message Chatbot"}
           />
         </div>
       </div>
