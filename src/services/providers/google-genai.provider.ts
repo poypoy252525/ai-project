@@ -1,6 +1,26 @@
 import type { LLMProvider, LLMMessage, LLMConfig } from "@/types/llm";
 import { GoogleGenAI } from "@google/genai";
 
+// Load the system prompt
+let systemPrompt: string | null = null;
+
+const loadSystemPrompt = async (): Promise<string> => {
+  if (systemPrompt === null) {
+    try {
+      const response = await fetch("/prompt.txt");
+      if (response.ok) {
+        systemPrompt = await response.text();
+      } else {
+        systemPrompt = "You are Delfin Chatbot, a helpful AI assistant."; // Fallback
+      }
+    } catch (error) {
+      console.warn("Failed to load prompt.txt, using fallback:", error);
+      systemPrompt = "You are Delfin Chatbot, a helpful AI assistant."; // Fallback
+    }
+  }
+  return systemPrompt;
+};
+
 /**
  * Google GenAI Provider Implementation
  *
@@ -29,6 +49,9 @@ export class GoogleGenAIProvider implements LLMProvider {
     messages: LLMMessage[]
   ): AsyncGenerator<string, void, unknown> {
     try {
+      // Load system prompt
+      const prompt = await loadSystemPrompt();
+
       // Convert messages to Google GenAI format
       const contents = messages.map((msg) => {
         const parts: Array<
@@ -37,7 +60,12 @@ export class GoogleGenAIProvider implements LLMProvider {
 
         // Add text content if it exists
         if (msg.content) {
-          parts.push({ text: msg.content });
+          // For user messages, prepend the system prompt
+          const textContent =
+            msg.role === "user"
+              ? `${prompt}\n\nUser: ${msg.content}`
+              : msg.content;
+          parts.push({ text: textContent });
         }
 
         // Add images if they exist
@@ -106,7 +134,8 @@ export class GoogleGenAIProvider implements LLMProvider {
       role: "model" as const,
       parts: [
         {
-          text: "IMPORTANT: When providing mathematical expressions, always use LaTeX syntax with dollar signs for proper rendering:\n- For inline math: $expression$\n- For block math: $$expression$$\n\nExamples:\n- Quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$\n- Equation: $ax^2 + bx + c = 0$\n- Fractions: $\\frac{1}{2}$\n- Square roots: $\\sqrt{x}$\n- Superscripts: $x^2$\n- Subscripts: $H_2O$\n\nAlways format ALL mathematical content this way.",
+          text: "",
+          //   text: "IMPORTANT: When providing mathematical expressions, always use LaTeX syntax with dollar signs for proper rendering:\n- For inline math: $expression$\n- For block math: $$expression$$\n\nExamples:\n- Quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$\n- Equation: $ax^2 + bx + c = 0$\n- Fractions: $\\frac{1}{2}$\n- Square roots: $\\sqrt{x}$\n- Superscripts: $x^2$\n- Subscripts: $H_2O$\n\nAlways format ALL mathematical content this way.",
         },
       ],
     };
