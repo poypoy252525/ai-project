@@ -77,7 +77,7 @@ const MessageBubble = memo<MessageBubbleProps>(
       // User message layout - aligned to the right
       return (
         <div className={cn("group w-full flex justify-end", className)}>
-          <div className="flex gap-3 px-3 py-2 sm:px-6 max-w-[80%] sm:max-w-[70%]">
+          <div className="flex gap-3 px-3 py-2 sm:px-6 max-w-[87%] lg:max-w-[80%]">
             {/* Message Content */}
             <div className="space-y-2 overflow-hidden w-full">
               {/* Images */}
