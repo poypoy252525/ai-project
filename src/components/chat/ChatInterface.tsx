@@ -127,7 +127,7 @@ const ChatInterface = memo<ChatInterfaceProps>(({ className }) => {
   return (
     <div
       className={cn(
-        "flex flex-col mobile-full-height bg-background",
+        "flex flex-col h-full bg-background overflow-hidden",
         className
       )}
     >

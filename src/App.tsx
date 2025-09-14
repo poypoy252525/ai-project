@@ -2,7 +2,7 @@ import { ChatInterface } from "@/components/chat";
 
 function App() {
   return (
-    <div className="h-screen bg-background">
+    <div className="h-full bg-background overflow-hidden">
       <ChatInterface />
     </div>
   );

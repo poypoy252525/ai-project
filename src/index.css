@@ -115,8 +115,25 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    height: 100%;
+    overflow: hidden; /* Prevent any scrolling at the document level */
+  }
+
   body {
     @apply bg-background text-foreground;
+    height: 100%;
+    overflow: hidden; /* Prevent any scrolling at the body level */
+    position: fixed; /* Fix the body to prevent any scroll behavior */
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  #root {
+    height: 100%;
+    overflow: hidden; /* Ensure root container doesn't scroll */
   }
 
   /* Mobile viewport height utilities */
