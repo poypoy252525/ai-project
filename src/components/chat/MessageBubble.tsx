@@ -40,9 +40,9 @@ const MessageBubble = memo<MessageBubbleProps>(
       // User message layout - aligned to the right
       return (
         <div className={cn("group w-full flex justify-end", className)}>
-          <div className="flex gap-3 px-3 py-2 sm:px-6">
+          <div className="flex gap-3 px-3 py-2 sm:px-6 max-w-[80%] sm:max-w-[70%]">
             {/* Message Content */}
-            <div className="space-y-2 overflow-hidden max-w-md">
+            <div className="space-y-2 overflow-hidden w-full">
               {/* Images */}
               {message.images && message.images.length > 0 && (
                 <div className="flex flex-wrap gap-2 justify-end">
@@ -51,7 +51,7 @@ const MessageBubble = memo<MessageBubbleProps>(
                       key={image.id}
                       src={image.url}
                       alt={image.name}
-                      className="max-w-xs max-h-48 object-cover rounded-lg border border-border cursor-pointer hover:opacity-90 transition-opacity"
+                      className="max-w-full max-h-48 object-cover rounded-lg border border-border cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={() => window.open(image.url, "_blank")}
                       title={`Click to view ${image.name} in full size`}
                     />
@@ -61,7 +61,7 @@ const MessageBubble = memo<MessageBubbleProps>(
 
               {/* Text Content */}
               {message.content && (
-                <div className="bg-muted text-foreground rounded-2xl px-4 py-3 w-fit ml-auto">
+                <div className="bg-muted text-foreground rounded-2xl px-4 py-3 w-fit ml-auto max-w-full">
                   <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
                     {message.content}
                   </p>
