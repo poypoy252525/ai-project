@@ -78,6 +78,9 @@ export class GoogleGenAIProvider implements LLMProvider {
         model: this.model,
         config: {
           systemInstruction: prompt,
+          thinkingConfig: {
+            thinkingBudget: 0,
+          },
         },
         contents,
       });
