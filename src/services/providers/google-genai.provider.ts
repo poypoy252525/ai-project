@@ -21,6 +21,11 @@ export class GoogleGenAIProvider implements LLMProvider {
     this.model = config.model || "gemini-2.5-flash-lite";
   }
 
+  async loadPrompt(): Promise<string> {
+    const response = await fetch("/prompt.txt");
+    return response.text();
+  }
+
   isConfigured(): boolean {
     return !!this.client;
   }
@@ -30,7 +35,9 @@ export class GoogleGenAIProvider implements LLMProvider {
   ): AsyncGenerator<string, void, unknown> {
     try {
       // Use direct system prompt for faster response
-      const prompt = "You are Delfin Chatbot, a helpful AI assistant.";
+      const prompt = await this.loadPrompt();
+
+      console.log(prompt);
 
       // Convert messages to Google GenAI format
       const contents = messages.map((msg) => {
