@@ -1,26 +1,6 @@
 import type { LLMProvider, LLMMessage, LLMConfig } from "@/types/llm";
 import { GoogleGenAI } from "@google/genai";
 
-// Load the system prompt
-let systemPrompt: string | null = null;
-
-const loadSystemPrompt = async (): Promise<string> => {
-  if (systemPrompt === null) {
-    try {
-      const response = await fetch("/prompt.txt");
-      if (response.ok) {
-        systemPrompt = await response.text();
-      } else {
-        systemPrompt = "You are Delfin Chatbot, a helpful AI assistant."; // Fallback
-      }
-    } catch (error) {
-      console.warn("Failed to load prompt.txt, using fallback:", error);
-      systemPrompt = "You are Delfin Chatbot, a helpful AI assistant."; // Fallback
-    }
-  }
-  return systemPrompt;
-};
-
 /**
  * Google GenAI Provider Implementation
  *
@@ -38,7 +18,7 @@ export class GoogleGenAIProvider implements LLMProvider {
     }
 
     this.client = new GoogleGenAI({ apiKey: config.apiKey });
-    this.model = config.model || "gemma-3-27b-it";
+    this.model = config.model || "gemini-2.5-flash-lite";
   }
 
   isConfigured(): boolean {
@@ -49,8 +29,8 @@ export class GoogleGenAIProvider implements LLMProvider {
     messages: LLMMessage[]
   ): AsyncGenerator<string, void, unknown> {
     try {
-      // Load system prompt
-      const prompt = await loadSystemPrompt();
+      // Use direct system prompt for faster response
+      const prompt = "You are Delfin Chatbot, a helpful AI assistant.";
 
       // Convert messages to Google GenAI format
       const contents = messages.map((msg) => {
@@ -60,12 +40,8 @@ export class GoogleGenAIProvider implements LLMProvider {
 
         // Add text content if it exists
         if (msg.content) {
-          // For user messages, prepend the system prompt
-          const textContent =
-            msg.role === "user"
-              ? `${prompt}\n\nUser: ${msg.content}`
-              : msg.content;
-          parts.push({ text: textContent });
+          // No longer prepend system prompt to user messages
+          parts.push({ text: msg.content });
         }
 
         // Add images if they exist
@@ -100,6 +76,9 @@ export class GoogleGenAIProvider implements LLMProvider {
 
       const response = await this.client.models.generateContentStream({
         model: this.model,
+        config: {
+          systemInstruction: prompt,
+        },
         contents,
       });
 
